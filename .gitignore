@@ -1,0 +1,10 @@
+*.pyc
+*.swp
+*.sqlite3
+*~
+media/*
+env/
+
+
+
+

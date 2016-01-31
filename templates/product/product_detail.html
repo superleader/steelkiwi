@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load tz %}
+
+{% block head %}
+<style>
+	.error{color:red}
+	.success{color:blue}
+</style>
+{% endblock %}
+
+{% block content %}
+	{% if messages %}
+	<ul class="messages">
+	    {% for message in messages %}
+	    	{% if message.extra_tags != 'text' %}
+	    		<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+	    	{% endif %}
+	    {% endfor %}
+	</ul>
+	{% endif %}
+
+	<h4> Product: {{ product}} </h4>
+	<p>Price: ${{ product.price }}</p>
+	<p>Description: {{ product.description }}</p>
+	<p>Likes: <span id="likes_count">{{ product.likes }}</span></p>
+	<div id="like_box">
+		{% if like %}
+			<i>You like this product</i>
+		{% else %}
+			<a href="{% url 'like-product' product.slug %}" id="btn_like" >Like</a></p>
+		{% endif %}
+	</div>
+	</br>
+	<p>
+		Give the comment:
+		<form method="POST" id="comment_form" action="{% url 'comment' %}">{% csrf_token %}
+		<p>{{ form.product }} {{form.text }} 
+			<span class="error" id="text_error">
+				{% for message in messages %}
+	    			{% if message.extra_tags == 'text' %}{{ message }}{% endif %}
+	    		{% endfor %}
+			</span>
+		</p>
+		<input type="submit" value="Submit"/>
+		</form>
+	</p>
+	<p>Last Comments :</p>
+	<div id="comment-box">
+		{% for comment in product.last_comments.all %}
+			<div>{{ comment.created_at|localtime|date:"H:i:s"}}: {{comment.text}}</div>	
+		{% endfor %}
+	</div>
+{% endblock %}
