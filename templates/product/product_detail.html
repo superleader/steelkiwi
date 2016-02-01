@@ -24,10 +24,12 @@
 	<p>Description: {{ product.description }}</p>
 	<p>Likes: <span id="likes_count">{{ product.likes }}</span></p>
 	<div id="like_box">
-		{% if like %}
-			<i>You like this product</i>
-		{% else %}
-			<a href="{% url 'like-product' product.slug %}" id="btn_like" >Like</a></p>
+		{% if request.user.is_authenticated %}
+			{% if like %}
+				<i>You like this product</i>
+			{% else %}
+				<a href="{% url 'like-product' product.slug %}" id="btn_like" >Like</a></p>
+			{% endif %}
 		{% endif %}
 	</div>
 	</br>
